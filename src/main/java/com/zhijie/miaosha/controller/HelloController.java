@@ -1,9 +1,8 @@
-package com.zhijie.miaosha;
+package com.zhijie.miaosha.controller;
 
 
 import com.zhijie.miaosha.common.ResponseData;
 import com.zhijie.miaosha.entity.Goods;
-import com.zhijie.miaosha.entity.User;
 import com.zhijie.miaosha.mapper.GoodsMapper;
 import com.zhijie.miaosha.mapper.UserMapper;
 import org.slf4j.Logger;
