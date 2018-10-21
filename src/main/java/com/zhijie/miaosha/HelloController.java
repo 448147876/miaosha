@@ -3,10 +3,12 @@ package com.zhijie.miaosha;
 
 import com.zhijie.miaosha.common.ResponseData;
 import com.zhijie.miaosha.entity.Goods;
+import com.zhijie.miaosha.entity.User;
 import com.zhijie.miaosha.mapper.GoodsMapper;
-import com.zhijie.miaosha.mapper.UserMapper;
+import com.zhijie.miaosha.mapper.UserDao;
 import com.zhijie.miaosha.utils.HelloService;
 import com.zhijie.miaosha.utils.base.GoodsKey;
+import com.zhijie.miaosha.utils.base.UserKey;
 import com.zhijie.miaosha.utils.service.CacheService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +25,7 @@ public class HelloController {
     Logger logger = LoggerFactory.getLogger(HelloController.class);
 
     @Autowired
-    UserMapper userMapper;
+    UserDao userDao;
 
     @Autowired
     GoodsMapper goodsMapper;
@@ -78,6 +80,49 @@ public class HelloController {
     private ResponseData getRedis2(Long goodsId) {
         Goods goods = helloService.getGoodsById(goodsId);
         return ResponseData.successByData(goods);
+    }
+
+    @RequestMapping("/get3")
+    @ResponseBody
+    private ResponseData getRedis3(Integer userId) {
+        User user = cacheService.getByPK(UserKey.selectByPK,userId,User.class);
+        return ResponseData.successByData(user);
+    }
+
+    @RequestMapping("/get4")
+    @ResponseBody
+    private ResponseData getRedis4(Integer userId) {
+
+        User user = new User();
+        user.setId(userId);
+        user.setName("老王");
+//        User user = cacheService.getByPK(UserKey.selectByPK,userId,User.class);
+        boolean bb = cacheService.insertByPK(UserKey.selectByPK,userId,user,User.class);
+        return ResponseData.successByData(user);
+    }
+
+    @RequestMapping("/get5")
+    @ResponseBody
+    private ResponseData getRedis5(Integer userId) {
+
+        User user = new User();
+        user.setId(userId);
+        user.setName("老王1");
+//        User user = cacheService.getByPK(UserKey.selectByPK,userId,User.class);
+        boolean bb = cacheService.updataByPK(UserKey.selectByPK,userId,user,User.class);
+        return ResponseData.successByData(user);
+    }
+
+    @RequestMapping("/get6")
+    @ResponseBody
+    private ResponseData getRedis6(Integer userId) {
+
+        User user = new User();
+        user.setId(userId);
+        user.setName("老王1");
+//        User user = cacheService.getByPK(UserKey.selectByPK,userId,User.class);
+        boolean bb = cacheService.deleteByPK(UserKey.selectByPK,userId);
+        return ResponseData.successByData(user);
     }
 
 
