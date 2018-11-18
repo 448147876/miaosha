@@ -1,11 +1,13 @@
 package com.zhijie.miaosha.entity;
 
+import com.zhijie.miaosha.cacheutils.base.BaseExample;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class OrderInfoExample {
+public class OrderInfoExample extends BaseExample {
     protected String orderByClause;
 
     protected boolean distinct;

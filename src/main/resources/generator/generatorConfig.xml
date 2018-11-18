@@ -12,7 +12,7 @@
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
         <!--数据库链接URL，用户名、密码 -->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://192.168.1.150:3306/miaosha" userId="root" password="root">
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/miaosha" userId="root" password="root">
         </jdbcConnection>
         <javaTypeResolver>
             <property name="forceBigDecimals" value="false"/>
@@ -29,8 +29,8 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         <!-- 要生成的表 tableName是数据库中的表名或视图名 domainObjectName是实体类名-->
-        <table tableName="user" domainObjectName="User">
-        </table>
+        <!--<table tableName="user" domainObjectName="User">-->
+        <!--</table>-->
         <table tableName="goods" domainObjectName="Goods">
         </table>
         <table tableName="miaosha_goods" domainObjectName="MiaoshaGoods">

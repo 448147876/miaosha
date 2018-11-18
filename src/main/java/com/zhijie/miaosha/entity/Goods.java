@@ -1,6 +1,6 @@
 package com.zhijie.miaosha.entity;
 
-import com.zhijie.miaosha.cacheutils.comm.BaseEntity;
+import com.zhijie.miaosha.cacheutils.base.BaseEntity;
 
 import java.math.BigDecimal;
 

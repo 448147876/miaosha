@@ -1,8 +1,10 @@
 package com.zhijie.miaosha.entity;
 
+import com.zhijie.miaosha.cacheutils.base.BaseEntity;
+
 import java.util.Date;
 
-public class MiaoshaUser {
+public class MiaoshaUser extends BaseEntity {
     private Long id;
 
     private String nickname;

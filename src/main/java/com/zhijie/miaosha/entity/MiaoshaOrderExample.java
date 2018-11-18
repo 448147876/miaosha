@@ -1,9 +1,11 @@
 package com.zhijie.miaosha.entity;
 
+import com.zhijie.miaosha.cacheutils.base.BaseExample;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class MiaoshaOrderExample {
+public class MiaoshaOrderExample extends BaseExample {
     protected String orderByClause;
 
     protected boolean distinct;

@@ -1,30 +1,11 @@
 package com.zhijie.miaosha.mapper;
 
+import com.zhijie.miaosha.cacheutils.base.BaseMapper;
 import com.zhijie.miaosha.entity.User;
 import com.zhijie.miaosha.entity.UserExample;
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Mapper;
 
-public interface UserMapper {
-    long countByExample(UserExample example);
+@Mapper
+public interface UserMapper extends BaseMapper<User, UserExample> {
 
-    int deleteByExample(UserExample example);
-
-    int deleteByPrimaryKey(Long id);
-
-    int insert(User record);
-
-    int insertSelective(User record);
-
-    List<User> selectByExample(UserExample example);
-
-    User selectByPrimaryKey(Long id);
-
-    int updateByExampleSelective(@Param("record") User record, @Param("example") UserExample example);
-
-    int updateByExample(@Param("record") User record, @Param("example") UserExample example);
-
-    int updateByPrimaryKeySelective(User record);
-
-    int updateByPrimaryKey(User record);
 }

@@ -3,37 +3,23 @@ package com.zhijie.miaosha.cacheutils.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.zhijie.miaosha.cacheutils.comm.Cache;
-import com.zhijie.miaosha.cacheutils.comm.CacheEcacheImpl;
-import com.zhijie.miaosha.cacheutils.comm.CacheRedisImpl;
 import com.zhijie.miaosha.cacheutils.comm.KeyPrefix;
-import com.zhijie.miaosha.cacheutils.config.CacheConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-
+/**
+ * @Description: 缓存service，使用缓存提升系统性能，加快开发效率
+ * @auther: 童志杰
+ * @date: 2018/11/14
+ */
 @Service
 public class CacheService {
 
-    static Cache cache;
-    @Autowired
-    DataSourceTransactionManager dataSourceTransactionManager;
 
-    /**
-     * 判断是使用ecache还是redis
-     */
-    static {
-        if (Objects.equals(CacheConfig.USE_CACHE, CacheConfig.REDIS)) {
-            cache = new CacheRedisImpl();
-        } else {
-            cache = new CacheEcacheImpl();
-        }
-    }
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
 
 
     /**
@@ -55,7 +41,8 @@ public class CacheService {
         if (zclass == null) {
             throw new RuntimeException("缓存zclass不能为空");
         }
-        String jsonStr = cache.get(keyPrefix.getPrefix() + key);
+        String realKey = keyPrefix.getPrefix() + ":" + key;
+        String jsonStr = stringRedisTemplate.opsForValue().get(realKey);
 
         return JSON.parseObject(jsonStr, zclass);
 
@@ -81,7 +68,7 @@ public class CacheService {
         if (zclass == null) {
             throw new RuntimeException("缓存zclass不能为空");
         }
-        String jsonStr = cache.get(prefix + ":" + key);
+        String jsonStr = stringRedisTemplate.opsForValue().get(prefix + ":" + key);
         return JSON.parseObject(jsonStr, zclass);
 
 
@@ -111,12 +98,13 @@ public class CacheService {
             throw new RuntimeException("缓存zclass不能为空");
         }
         int time = keyPrefix.expireSeconds();
-        String realKey = keyPrefix.getPrefix() + key;
+        String realKey = keyPrefix.getPrefix() +":"+ key;
         if (time <= 0) {
-            return cache.set(realKey, JSONObject.toJSONString(t));
+            stringRedisTemplate.opsForValue().set(realKey, JSONObject.toJSONString(t));
         } else {
-            return cache.setTime(realKey, JSONObject.toJSONString(t), time);
+            stringRedisTemplate.opsForValue().set(realKey, JSONObject.toJSONString(t), time);
         }
+        return true;
     }
 
     /**
@@ -143,8 +131,8 @@ public class CacheService {
             throw new RuntimeException("缓存time大于0");
         }
         String realKey = prefix + ":" + key;
-
-        return cache.setTime(realKey, JSONObject.toJSONString(t), time);
+        stringRedisTemplate.opsForValue().set(realKey, JSONObject.toJSONString(t), time);
+        return true;
     }
 
     /**
@@ -167,8 +155,8 @@ public class CacheService {
             throw new RuntimeException("缓存data不能为空");
         }
         String realKey = prefix + ":" + key;
-
-        return cache.set(realKey, JSONObject.toJSONString(t));
+        stringRedisTemplate.opsForValue().set(realKey, JSONObject.toJSONString(t));
+        return true;
     }
 
     /**
@@ -185,9 +173,9 @@ public class CacheService {
         if (StringUtils.isBlank(key)) {
             throw new RuntimeException("缓存key不能为空");
         }
-        String realKey = keyPrefix.getPrefix() + key;
-
-        return cache.remove(realKey);
+        String realKey = keyPrefix.getPrefix() + ":" + key;
+        stringRedisTemplate.delete(realKey);
+        return true;
     }
 
     /**
@@ -205,60 +193,10 @@ public class CacheService {
             throw new RuntimeException("缓存key不能为空");
         }
         String realKey = prefix + ":" + key;
-
-        return cache.remove(realKey);
+        stringRedisTemplate.delete(realKey);
+        return true;
     }
 
-    /**
-     * 根据前缀删除缓存
-     *
-     * @param keyPrefix
-     * @return
-     */
-    public Boolean removePrefix(KeyPrefix keyPrefix) {
-        if (keyPrefix == null) {
-            throw new RuntimeException("缓存keyPrefix不能为空");
-        }
-        String realKey = keyPrefix.getPrefix();
-
-        return cache.removePrefix(realKey);
-    }
-
-    /**
-     * 前缀删除缓存
-     *
-     * @param keyPrefix
-     * @return
-     */
-    public Boolean removePrefix(String keyPrefix) {
-        if (keyPrefix == null) {
-            throw new RuntimeException("缓存keyPrefix不能为空");
-        }
-        return cache.removePrefix(keyPrefix);
-    }
-
-    /**
-     * 根据前缀返回对象
-     *
-     * @param keyPrefix
-     * @param zclass
-     * @param <T>
-     * @return
-     */
-    public <T> List<T> getByPrefix(KeyPrefix keyPrefix, Class<T> zclass) {
-        if (keyPrefix == null) {
-            throw new RuntimeException("缓存keyPrefix不能为空");
-        }
-        if (zclass == null) {
-            throw new RuntimeException("缓存zclass不能为空");
-        }
-        List<String> tList = cache.getPrefix(keyPrefix.getPrefix());
-        List<T> resultList = new LinkedList<>();
-        for (String str : tList) {
-            resultList.add(JSON.parseObject(str, zclass));
-        }
-        return resultList;
-    }
 
     /**
      * 判断缓存是否存在
@@ -275,48 +213,12 @@ public class CacheService {
             throw new RuntimeException("缓存key不能为空");
         }
         String realKey = keyPrefix + ":" + key;
-        Object object = cache.get(realKey);
-        if (object == null) {
+        String value = stringRedisTemplate.opsForValue().get(realKey);
+        if (value == null) {
             return false;
         } else {
             return true;
         }
-    }
-
-    /**
-     * 根据前缀递减
-     *
-     * @param prefix
-     * @param key
-     * @return
-     */
-    public Long decr(String prefix, String key) {
-        if (prefix == null) {
-            throw new RuntimeException("缓存prefix不能为空");
-        }
-        if (StringUtils.isBlank(key)) {
-            throw new RuntimeException("缓存key不能为空");
-        }
-        return cache.decr(prefix + ":" + key);
-
-    }
-
-    /**
-     * 根据前缀递加
-     *
-     * @param prefix
-     * @param key
-     * @return
-     */
-    public Long incr(String prefix, String key) {
-        if (prefix == null) {
-            throw new RuntimeException("缓存prefix不能为空");
-        }
-        if (StringUtils.isBlank(key)) {
-            throw new RuntimeException("缓存key不能为空");
-        }
-        return cache.incr(prefix + ":" + key);
-
     }
 
 

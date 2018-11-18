@@ -1,11 +1,10 @@
 package com.zhijie.miaosha.service;
 
 
-import com.zhijie.miaosha.cacheutils.comm.BaseService;
-import com.zhijie.miaosha.cacheutils.comm.Cacheable;
+import com.zhijie.miaosha.cacheutils.base.BaseService;
 import com.zhijie.miaosha.entity.User;
+import com.zhijie.miaosha.entity.UserExample;
 
-public interface IUserService extends BaseService {
+public interface IUserService extends BaseService<User, UserExample> {
 
-    User getByID(Integer userId);
 }

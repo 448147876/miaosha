@@ -1,6 +1,8 @@
 package com.zhijie.miaosha.entity;
 
-public class MiaoshaOrder {
+import com.zhijie.miaosha.cacheutils.base.BaseEntity;
+
+public class MiaoshaOrder extends BaseEntity {
     private Long id;
 
     private Long userId;

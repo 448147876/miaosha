@@ -1,9 +1,11 @@
 package com.zhijie.miaosha.entity;
 
+import com.zhijie.miaosha.cacheutils.base.BaseEntity;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class MiaoshaGoods {
+public class MiaoshaGoods extends BaseEntity {
     private Long id;
 
     private Long goodsId;
