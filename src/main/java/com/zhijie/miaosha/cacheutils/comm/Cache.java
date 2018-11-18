@@ -1,4 +1,4 @@
-package com.zhijie.miaosha.utils.base;
+package com.zhijie.miaosha.cacheutils.comm;
 
 
 import java.util.List;

@@ -1,6 +1,7 @@
-package com.zhijie.miaosha.utils.base;
+package com.zhijie.miaosha.cacheutils.comm;
 
-import com.zhijie.miaosha.utils.config.CacheConfig;
+import com.zhijie.miaosha.cacheutils.comm.KeyPrefix;
+import com.zhijie.miaosha.cacheutils.config.CacheConfig;
 
 public abstract class BasePrefix implements KeyPrefix {
 

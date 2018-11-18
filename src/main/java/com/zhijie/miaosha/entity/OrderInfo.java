@@ -63,7 +63,7 @@ public class OrderInfo {
     }
 
     public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName == null ? null : goodsName.trim();
+        this.goodsName = goodsName;
     }
 
     public Integer getGoodsCount() {

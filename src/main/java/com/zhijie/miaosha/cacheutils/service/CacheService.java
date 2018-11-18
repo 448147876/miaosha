@@ -1,32 +1,24 @@
-package com.zhijie.miaosha.utils.service;
+package com.zhijie.miaosha.cacheutils.service;
 
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.zhijie.miaosha.common.BaseDao;
-import com.zhijie.miaosha.utils.base.Cache;
-import com.zhijie.miaosha.utils.base.CacheEcacheImpl;
-import com.zhijie.miaosha.utils.base.CacheRedisImpl;
-import com.zhijie.miaosha.utils.base.KeyPrefix;
-import com.zhijie.miaosha.utils.config.CacheConfig;
+import com.zhijie.miaosha.cacheutils.comm.Cache;
+import com.zhijie.miaosha.cacheutils.comm.CacheEcacheImpl;
+import com.zhijie.miaosha.cacheutils.comm.CacheRedisImpl;
+import com.zhijie.miaosha.cacheutils.comm.KeyPrefix;
+import com.zhijie.miaosha.cacheutils.config.CacheConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
 @Service
 public class CacheService {
-
-    @Autowired
-    BaseDao baseDao;
 
     static Cache cache;
     @Autowired
@@ -43,201 +35,6 @@ public class CacheService {
         }
     }
 
-    /**
-     * 查询表数据
-     *
-     * @param keyPrefix
-     * @param key
-     * @param zclass
-     * @param <T>
-     * @return
-     */
-    public <T> T getByPK(KeyPrefix keyPrefix, Serializable key, Class<T> zclass) {
-        if (keyPrefix == null) {
-            throw new RuntimeException("缓存prefix不能为空");
-        }
-        if (key == null) {
-            throw new RuntimeException("缓存key不能为空");
-        }
-        if (zclass == null) {
-            throw new RuntimeException("缓存zclass不能为空");
-        }
-        String realKey = keyPrefix.getPrefix() + String.valueOf(key);
-        String jsonStr = cache.get(realKey);
-        if (StringUtils.isBlank(jsonStr)) {
-            boolean flag = false;
-            T t = (T) baseDao.selectByPrimaryKey(key);
-            if (t != null) {
-                int time = keyPrefix.expireSeconds();
-                if (time <= 0) {
-                    flag = cache.set(realKey, JSONObject.toJSONString(t));
-                } else {
-                    flag = cache.setTime(realKey, JSONObject.toJSONString(t), time);
-                }
-                if (!flag) {
-                    return null;
-                }
-            } else {
-                return null;
-            }
-
-            return t;
-        }
-
-        return JSON.parseObject(jsonStr, zclass);
-    }
-
-    /**
-     * 插入表数据
-     *
-     * @param keyPrefix
-     * @param key
-     * @param zclass
-     * @param <T>
-     * @return
-     */
-    public <T> boolean insertByPK(KeyPrefix keyPrefix, Serializable key, T t, Class<T> zclass) {
-
-
-        if (keyPrefix == null) {
-            throw new RuntimeException("缓存prefix不能为空");
-        }
-        if (key == null) {
-            throw new RuntimeException("缓存key不能为空");
-        }
-        if (zclass == null) {
-            throw new RuntimeException("缓存zclass不能为空");
-        }
-        if (t == null) {
-            throw new RuntimeException("缓存t不能为空");
-        }
-        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-        def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-        TransactionStatus status = dataSourceTransactionManager.getTransaction(def);
-        try {
-            boolean flag = false;
-            int count = baseDao.insert(t);
-            if (count > 0) {
-                int time = keyPrefix.expireSeconds();
-                String realKey = keyPrefix.getPrefix() + String.valueOf(key);
-                if (time <= 0) {
-                    flag = cache.set(realKey, JSONObject.toJSONString(t));
-                } else {
-                    flag = cache.setTime(realKey, JSONObject.toJSONString(t), time);
-                }
-            } else {
-                flag = false;
-            }
-
-            if (flag) {
-                dataSourceTransactionManager.commit(status);
-                return true;
-            } else {
-                dataSourceTransactionManager.rollback(status);
-                return false;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            dataSourceTransactionManager.rollback(status);
-            return false;
-        }
-
-    }
-
-    /**
-     * 更新表数据
-     *
-     * @param keyPrefix
-     * @param key
-     * @param zclass
-     * @param <T>
-     * @return
-     */
-    public <T> boolean updataByPK(KeyPrefix keyPrefix, Serializable key, T t, Class<T> zclass) {
-
-
-        if (keyPrefix == null) {
-            throw new RuntimeException("缓存prefix不能为空");
-        }
-        if (key == null) {
-            throw new RuntimeException("缓存key不能为空");
-        }
-        if (zclass == null) {
-            throw new RuntimeException("缓存zclass不能为空");
-        }
-        if (t == null) {
-            throw new RuntimeException("缓存t不能为空");
-        }
-        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-        def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-        TransactionStatus status = dataSourceTransactionManager.getTransaction(def);
-        try {
-            boolean flag = false;
-            int count = baseDao.updateByPrimaryKey(t);
-            if (count > 0) {
-                int time = keyPrefix.expireSeconds();
-                String realKey = keyPrefix.getPrefix() + String.valueOf(key);
-                if (time <= 0) {
-                    flag = cache.set(realKey, JSONObject.toJSONString(t));
-                } else {
-                    flag = cache.setTime(realKey, JSONObject.toJSONString(t), time);
-                }
-            } else {
-                flag = false;
-            }
-            if (flag) {
-                dataSourceTransactionManager.commit(status);
-                return true;
-            } else {
-                dataSourceTransactionManager.rollback(status);
-                return false;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            dataSourceTransactionManager.rollback(status);
-            return false;
-        }
-
-    }
-
-    /**
-     * 更新表数据
-     *
-     * @param keyPrefix
-     * @param key
-     * @return
-     */
-    public boolean deleteByPK(KeyPrefix keyPrefix, Serializable key) {
-
-
-        if (keyPrefix == null) {
-            throw new RuntimeException("缓存prefix不能为空");
-        }
-        if (key == null) {
-            throw new RuntimeException("缓存key不能为空");
-        }
-        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-        def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-        TransactionStatus status = dataSourceTransactionManager.getTransaction(def);
-        try {
-            int count = baseDao.deleteByPrimaryKey(key);
-            if (count > 0) {
-                String realKey = keyPrefix.getPrefix() + String.valueOf(key);
-                cache.remove(realKey);
-                dataSourceTransactionManager.commit(status);
-                return true;
-            } else {
-                dataSourceTransactionManager.rollback(status);
-                return false;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            dataSourceTransactionManager.rollback(status);
-            return false;
-        }
-
-    }
 
     /**
      * 根据前缀和key获取对象

@@ -1,4 +1,4 @@
-package com.zhijie.miaosha.utils.base;
+package com.zhijie.miaosha.cacheutils.comm;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -18,12 +18,14 @@ import java.util.Objects;
 @Component
 public class EcacheAspect {
 
-    @Around("@annotation(Cacheable)")
+    @Around("@annotation(com.zhijie.miaosha.cacheutils.comm.Cacheable)")
     public Object aroundMethod(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         //结果
         Object result = null;
         //注解key
         String keyName = "";
+
+
         //存活期
         int timeToLiveSeconds;
         //闲置时间
@@ -36,6 +38,8 @@ public class EcacheAspect {
         Cacheable annotation = targetMethod.getAnnotation(Cacheable.class);
         //如果注解没有写key，则使用包名+类名+方法名+参数类型+参数值
         keyName = annotation.keyName();
+
+        Class testCase = annotation.testCase();
         if (Objects.equals("", keyName)) {
             keyName = targetMethod.toGenericString();
             Object[] args = proceedingJoinPoint.getArgs();

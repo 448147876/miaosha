@@ -1,4 +1,4 @@
-package com.zhijie.miaosha.utils.base;
+package com.zhijie.miaosha.cacheutils.comm;
 
 
 /**
@@ -11,5 +11,6 @@ public interface KeyPrefix {
     public int expireSeconds();
 
     public String getPrefix();
+
 
 }

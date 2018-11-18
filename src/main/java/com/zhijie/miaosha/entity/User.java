@@ -1,17 +1,19 @@
 package com.zhijie.miaosha.entity;
 
-import java.io.Serializable;
-
-public class User implements Serializable {
-    private Integer id;
+public class User {
+    private Long id;
 
     private String name;
 
-    public Integer getId() {
+    private Integer age;
+
+    private String email;
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -20,6 +22,22 @@ public class User implements Serializable {
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

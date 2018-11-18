@@ -1,4 +1,4 @@
-package com.zhijie.miaosha.utils.config;
+package com.zhijie.miaosha.cacheutils.config;
 
 public class CacheConfig {
     public static final String PROJECT_NAME = "yhzhaj";

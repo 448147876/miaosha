@@ -32,7 +32,7 @@ public class MiaoshaUser {
     }
 
     public void setNickname(String nickname) {
-        this.nickname = nickname == null ? null : nickname.trim();
+        this.nickname = nickname;
     }
 
     public String getPassword() {
@@ -40,7 +40,7 @@ public class MiaoshaUser {
     }
 
     public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+        this.password = password;
     }
 
     public String getSalt() {
@@ -48,7 +48,7 @@ public class MiaoshaUser {
     }
 
     public void setSalt(String salt) {
-        this.salt = salt == null ? null : salt.trim();
+        this.salt = salt;
     }
 
     public String getHead() {
@@ -56,7 +56,7 @@ public class MiaoshaUser {
     }
 
     public void setHead(String head) {
-        this.head = head == null ? null : head.trim();
+        this.head = head;
     }
 
     public Date getRegisterDate() {

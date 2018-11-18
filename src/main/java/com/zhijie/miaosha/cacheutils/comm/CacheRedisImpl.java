@@ -1,4 +1,4 @@
-package com.zhijie.miaosha.utils.base;
+package com.zhijie.miaosha.cacheutils.comm;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -26,7 +26,7 @@ public class CacheRedisImpl implements Cache {
         //配置资源池最大闲置数
         config.setMaxIdle(2000);
         config.setMinIdle(2000);
-        pool = new JedisPool(config, "192.168.1.150", 6379, 10000, "redis");
+        pool = new JedisPool(config, "192.168.0.150", 6379, 10000, "redis");
     }
 
 

@@ -1,8 +1,10 @@
 package com.zhijie.miaosha.entity;
 
+import com.zhijie.miaosha.cacheutils.comm.BaseEntity;
+
 import java.math.BigDecimal;
 
-public class Goods {
+public class Goods extends BaseEntity {
     private Long id;
 
     private String goodsName;
@@ -30,7 +32,7 @@ public class Goods {
     }
 
     public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName == null ? null : goodsName.trim();
+        this.goodsName = goodsName;
     }
 
     public String getGoodsTitle() {
@@ -38,7 +40,7 @@ public class Goods {
     }
 
     public void setGoodsTitle(String goodsTitle) {
-        this.goodsTitle = goodsTitle == null ? null : goodsTitle.trim();
+        this.goodsTitle = goodsTitle;
     }
 
     public String getGoodsImg() {
@@ -46,7 +48,7 @@ public class Goods {
     }
 
     public void setGoodsImg(String goodsImg) {
-        this.goodsImg = goodsImg == null ? null : goodsImg.trim();
+        this.goodsImg = goodsImg;
     }
 
     public BigDecimal getGoodsPrice() {
@@ -70,6 +72,6 @@ public class Goods {
     }
 
     public void setGoodsDetail(String goodsDetail) {
-        this.goodsDetail = goodsDetail == null ? null : goodsDetail.trim();
+        this.goodsDetail = goodsDetail;
     }
 }

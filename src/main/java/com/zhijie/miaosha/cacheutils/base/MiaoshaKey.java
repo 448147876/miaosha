@@ -1,6 +1,9 @@
-package com.zhijie.miaosha.utils.base;
+package com.zhijie.miaosha.cacheutils.base;
 
-public class MiaoshaKey extends BasePrefix{
+import com.zhijie.miaosha.cacheutils.comm.BasePrefix;
+import com.zhijie.miaosha.cacheutils.comm.KeyPrefix;
+
+public class MiaoshaKey extends BasePrefix {
 
 	private MiaoshaKey( int expireSeconds, String prefix) {
 		super(expireSeconds, prefix);
@@ -8,4 +11,5 @@ public class MiaoshaKey extends BasePrefix{
 	public static MiaoshaKey isGoodsOver = new MiaoshaKey(0, "go");
 	public static MiaoshaKey getMiaoshaPath = new MiaoshaKey(60, "mp");
 	public static MiaoshaKey getMiaoshaVerifyCode = new MiaoshaKey(300, "vc");
+
 }

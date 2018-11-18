@@ -19,11 +19,9 @@
         </javaTypeResolver>
         <!-- 生成模型的包名和位置-->
         <javaModelGenerator targetPackage="com.zhijie.miaosha.entity" targetProject="src/main/java">
-            <property name="enableSubPackages" value="true"/>
-            <property name="trimStrings" value="true"/>
         </javaModelGenerator>
         <!-- 生成映射文件的包名和位置-->
-        <sqlMapGenerator targetPackage="mapping" targetProject="src/main/resources">
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
         <!-- 生成DAO的包名和位置-->
@@ -31,23 +29,17 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         <!-- 要生成的表 tableName是数据库中的表名或视图名 domainObjectName是实体类名-->
-        <table tableName="user" domainObjectName="User" enableCountByExample="false"
-               enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+        <table tableName="user" domainObjectName="User">
         </table>
-        <table tableName="goods" domainObjectName="Goods" enableCountByExample="false"
-               enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+        <table tableName="goods" domainObjectName="Goods">
         </table>
-        <table tableName="miaosha_goods" domainObjectName="MiaoshaGoods" enableCountByExample="false"
-               enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+        <table tableName="miaosha_goods" domainObjectName="MiaoshaGoods">
         </table>
-        <table tableName="miaosha_order" domainObjectName="MiaoshaOrder" enableCountByExample="false"
-               enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+        <table tableName="miaosha_order" domainObjectName="MiaoshaOrder">
         </table>
-        <table tableName="miaosha_user" domainObjectName="MiaoshaUser" enableCountByExample="false"
-               enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+        <table tableName="miaosha_user" domainObjectName="MiaoshaUser">
         </table>
-        <table tableName="order_info" domainObjectName="OrderInfo" enableCountByExample="false"
-               enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+        <table tableName="order_info" domainObjectName="OrderInfo">
         </table>
 
     </context>
